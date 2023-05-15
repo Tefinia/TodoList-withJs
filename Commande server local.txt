@@ -1,0 +1,7 @@
+//voici l'etape pour creer le serveur local
+1- Instal php
+2- Ouvrir l'invité de commande
+	> cd <Chemin_du_projet>
+	> php -S localhost:8000
+3- Ouvrir le navigateur et entrer ce url
+	http://localhost:8000

@@ -8,12 +8,15 @@ const clear = document.getElementById('clear')
 const url = document.getElementById('url')
 const load = document.getElementById('load')
 
-const tasks = ['Lire un livre', 'Faire un exercice']
+// Nouvelle instance pour la clé 'tasks'
+const storage = new ArrayStorage('tasks')
+//On récupère le tableau des tâches déjà existantes ou un tableau vide
+const tasks = storage.list
 
 //Une fonction qui ajoute les taches au DOM avec un bouton de suppression auquel attache un evenement
 function taskToDOM(task){
 	// Si on a une chaîne non-vide
-	if(typeof task === 'string' && task ) { //tasks[i] raha vide de false zay rhf ao am if
+	if(typeof task === 'string' && task ) { 
 		const li = document.createElement('li')
 		const remove = document.createElement('button')
 
@@ -22,6 +25,8 @@ function taskToDOM(task){
 
 		remove.addEventListener('click', () => {
 			//on veut supprimer son parent cad li anle remove
+			const value = remove.parentNode.firstChild.textContent
+			storage.remove(value)
 			list.removeChild(remove.parentNode)
 		})
 
@@ -39,11 +44,9 @@ tasks.forEach(task => taskToDOM(task))
 
 // On gère l'ajout de tàche avec le bouton ADD et la touche enter
 function newTask() {
-	if (tasks.indexOf(input.value) === -1 && taskToDOM(input.value)) {
-		tasks.push(input.value)
+	if (storage.list.indexOf(input.value) === -1 && taskToDOM(input.value)) {
+		storage.set(input.value)
 		input.value = ''
-		list.innerHTML = ''
-		tasks.forEach(task => taskToDOM(task))	
 	} else {
 		alert('Ce tâche existe')
 	}
@@ -59,6 +62,7 @@ input.addEventListener('keydown', e => {
 
 //On supprime la liste du DOM et du navigateur
 clear.addEventListener('click', () => {
+	storage.clear()
 	list.innerHTML = ''
 })
 
