@@ -63,10 +63,29 @@ input.addEventListener('keydown', e => {
 //On supprime la liste du DOM et du navigateur
 clear.addEventListener('click', () => {
 	storage.clear()
+	url.value = ''
 	list.innerHTML = ''
 })
 
 // On gère l'importation de tâche
 load.addEventListener('click', () => {
-
+	fetch(url.value)
+		.then(response => {
+			if (response.ok) {
+				return response.json()
+			}
+			throw new Error(`${response.statusText} (${response.status})`)
+		} )
+		.then(tasks => {
+			if(Array.isArray(tasks)) {
+				tasks.forEach(task => {
+					if (storage.list.indexOf(task) === -1 && taskToDOM(task)) {
+					storage.set(task)
+					}
+				})
+				return 
+			}
+			throw new TypeError(`La réponse n'est pas un tableau JSON  `)
+			
+		})
 })
